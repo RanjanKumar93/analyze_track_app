@@ -26,7 +26,7 @@ class DatabaseHelper {
       version: 1,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE tracks(id TEXT PRIMARY KEY, title TEXT, amount REAL, date TEXT, category INTEGER)',
+          'CREATE TABLE tracks(id TEXT PRIMARY KEY, title TEXT, amount REAL, date TEXT, category TEXT)',
         );
       },
     );
@@ -51,7 +51,7 @@ class DatabaseHelper {
         title: maps[i]['title'],
         amount: maps[i]['amount'],
         date: DateTime.parse(maps[i]['date']),
-        category: Category.values[maps[i]['category']],
+        category: maps[i]['category'],
       );
     });
   }
@@ -73,5 +73,20 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+
+    Future<void> deleteDatabaseFile() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'database.db');
+    
+    // Close the database before deleting it
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
+    }
+
+    // Delete the database file
+    await deleteDatabase(path);
   }
 }

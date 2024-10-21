@@ -1,5 +1,6 @@
 import 'package:analyze_track/local/local_database.dart';
 import 'package:analyze_track/models/expense.dart';
+import 'package:analyze_track/widgets/chart/chart.dart';
 import 'package:analyze_track/widgets/expenses_list/expenses_list.dart';
 import 'package:analyze_track/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,21 @@ class _ExpensesState extends State<Expenses> {
         ],
       ),
       body: Column(
-        children: [Expanded(child: mainContent)],
+        children: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => ChartScreen(
+                    dbHelper: widget.dbHelper,
+                  ),
+                ),
+              );
+            },
+            child: const Text('Get chart'),
+          ),
+          Expanded(child: mainContent)
+        ],
       ),
     );
   }

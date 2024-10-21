@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
@@ -6,14 +5,22 @@ final formatter = DateFormat.yMd();
 
 const uuid = Uuid();
 
-enum Category { food, travel, leisure, work }
+class Category {
+  final String value;
+  const Category._(this.value);
 
-const categoryIcons = {
-  Category.food: Icons.lunch_dining,
-  Category.travel: Icons.flight_takeoff,
-  Category.leisure: Icons.movie,
-  Category.work: Icons.work,
-};
+  static List<Category> values = [];
+
+  // Method to add new values
+  static void addValue(String newValue) {
+    values.add(Category._(newValue));
+  }
+
+  // Method to remove values
+  static void removeValue(String valueToRemove) {
+    values.removeWhere((item) => item.value == valueToRemove);
+  }
+}
 
 class Expense {
   Expense({
@@ -28,7 +35,7 @@ class Expense {
   final String title;
   final double amount;
   final DateTime date;
-  final Category category;
+  final String category;
 
   String get formattedDate {
     return formatter.format(date);
@@ -41,7 +48,7 @@ class Expense {
       'title': title,
       'amount': amount,
       'date': date.toIso8601String(), // Store date as ISO string
-      'category': category.index // Store category as an integer
+      'category': category, // Store category as an integer
     };
   }
 

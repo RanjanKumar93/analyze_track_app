@@ -16,7 +16,8 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
-  Category _selectedCategory = Category.leisure;
+  final TextEditingController _categoryInputController =
+      TextEditingController();
 
   void _presentDatePicker() async {
     final now = DateTime.now();
@@ -33,8 +34,7 @@ class _NewExpenseState extends State<NewExpense> {
   }
 
   void _submitExpenseData() {
-    final enteredAmount = double.tryParse(_amountController
-        .text); // tryParse('Hello') => null, tryParse('1.12') => 1.12
+    final enteredAmount = double.tryParse(_amountController.text);
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
     if (_titleController.text.trim().isEmpty ||
         amountIsInvalid ||
@@ -63,7 +63,7 @@ class _NewExpenseState extends State<NewExpense> {
         title: _titleController.text,
         amount: enteredAmount,
         date: _selectedDate!,
-        category: _selectedCategory,
+        category: _categoryInputController.text,
       ),
     );
     Navigator.pop(context);
@@ -73,6 +73,7 @@ class _NewExpenseState extends State<NewExpense> {
   void dispose() {
     _titleController.dispose();
     _amountController.dispose();
+    _categoryInputController.dispose();
     super.dispose();
   }
 
@@ -96,7 +97,6 @@ class _NewExpenseState extends State<NewExpense> {
                   controller: _amountController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    prefixText: '\$ ',
                     label: Text('Amount'),
                   ),
                 ),
@@ -124,40 +124,46 @@ class _NewExpenseState extends State<NewExpense> {
             ],
           ),
           const SizedBox(height: 16),
-          Row(
+          Column(
             children: [
-              DropdownButton(
-                value: _selectedCategory,
-                items: Category.values
-                    .map(
-                      (category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(
-                          category.name.toUpperCase(),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value == null) {
-                    return;
-                  }
-                  setState(() {
-                    _selectedCategory = value;
-                  });
+              TextField(
+                maxLength: 10,
+                controller: _categoryInputController,
+                onChanged: (text) {
+                  // Convert input to lowercase
+                  String lowerCaseText = text.toLowerCase();
+
+                  // Set the modified text back to the controller
+                  _categoryInputController.value =
+                      _categoryInputController.value.copyWith(
+                    text: lowerCaseText,
+                    selection:
+                        TextSelection.collapsed(offset: lowerCaseText.length),
+                  );
                 },
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Category',
+                ),
               ),
-              const Spacer(),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
+              const SizedBox(
+                height: 8,
               ),
-              ElevatedButton(
-                onPressed: _submitExpenseData,
-                child: const Text('Save Expense'),
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _submitExpenseData,
+                    child: const Text('Save Expense'),
+                  ),
+                ],
+              )
             ],
           ),
         ],
