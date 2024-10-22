@@ -1,18 +1,18 @@
-import 'package:analyze_track/models/expense.dart';
+import 'package:analyze_track/models/track.dart';
 import 'package:flutter/material.dart';
 
-class NewExpense extends StatefulWidget {
-  const NewExpense({super.key, required this.onAddExpense});
+class NewTrack extends StatefulWidget {
+  const NewTrack({super.key, required this.onAddTrack});
 
-  final void Function(Expense expense) onAddExpense;
+  final void Function(Track expense) onAddTrack;
 
   @override
-  State<NewExpense> createState() {
-    return _NewExpenseState();
+  State<NewTrack> createState() {
+    return _NewTrackState();
   }
 }
 
-class _NewExpenseState extends State<NewExpense> {
+class _NewTrackState extends State<NewTrack> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
@@ -58,8 +58,8 @@ class _NewExpenseState extends State<NewExpense> {
       return;
     }
 
-    widget.onAddExpense(
-      Expense(
+    widget.onAddTrack(
+      Track(
         title: _titleController.text,
         amount: enteredAmount,
         date: _selectedDate!,

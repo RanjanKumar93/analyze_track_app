@@ -1,5 +1,5 @@
 import 'package:analyze_track/local/local_database.dart';
-import 'package:analyze_track/models/expense.dart';
+import 'package:analyze_track/models/track.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -21,18 +21,11 @@ class _ChartScreenState extends State<ChartScreen> {
     super.initState();
     _tooltip = TooltipBehavior(enable: true);
     _fetchExpensesAndPrepareData();
-    // data = [
-    //   _ChartData('David', 25),
-    //   _ChartData('Steve', 38),
-    //   _ChartData('Jack', 34),
-    //   _ChartData('Others', 52)
-    // ];
-    // _tooltip = TooltipBehavior(enable: true);
   }
 
   Future<void> _fetchExpensesAndPrepareData() async {
     // Fetch the expenses from the local database
-    List<Expense> expenses = await widget.dbHelper.getExpenses();
+    List<Track> expenses = await widget.dbHelper.getTracks();
 
     // Map the expenses to chart data (e.g., by category and total amount)
     Map<String, double> expenseByCategory = {};
@@ -66,16 +59,14 @@ class _ChartScreenState extends State<ChartScreen> {
           ? const Center(child: CircularProgressIndicator())
           : SfCircularChart(
               legend: const Legend(
-                isVisible: true,
-                position: LegendPosition.bottom
-              ),
+                  isVisible: true, position: LegendPosition.bottom),
               tooltipBehavior: _tooltip,
               series: <CircularSeries<_ChartData, String>>[
                 DoughnutSeries<_ChartData, String>(
                   dataSource: data,
                   xValueMapper: (_ChartData data, _) => data.x,
                   yValueMapper: (_ChartData data, _) => data.y,
-                  name: 'Expenses',
+                  name: 'Tracks',
                   dataLabelSettings: const DataLabelSettings(isVisible: true),
                 )
               ],
@@ -87,6 +78,6 @@ class _ChartScreenState extends State<ChartScreen> {
 class _ChartData {
   _ChartData(this.x, this.y);
 
-  final String x; // Category (e.g., 'Food', 'Transport')
+  final String x; // Category
   final double y; // Total amount spent in that category
 }

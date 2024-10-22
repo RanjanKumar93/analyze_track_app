@@ -22,8 +22,8 @@ class Category {
   }
 }
 
-class Expense {
-  Expense({
+class Track {
+  Track({
     required this.title,
     required this.amount,
     required this.date,
@@ -41,7 +41,7 @@ class Expense {
     return formatter.format(date);
   }
 
-  // Convert the Expense object to a Map for database storage.
+  // Convert the Track object to a Map for database storage.
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -54,6 +54,6 @@ class Expense {
 
   @override
   String toString() {
-    return 'Expense{id: $id, title: $title, amount: $amount, date: $date, category: $category}';
+    return 'Track{id: $id, title: $title, amount: $amount, date: $date, category: $category}';
   }
 }

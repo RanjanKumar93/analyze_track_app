@@ -1,71 +1,71 @@
 import 'package:analyze_track/local/local_database.dart';
-import 'package:analyze_track/models/expense.dart';
+import 'package:analyze_track/models/track.dart';
 import 'package:analyze_track/widgets/chart/chart.dart';
-import 'package:analyze_track/widgets/expenses_list/expenses_list.dart';
-import 'package:analyze_track/widgets/new_expense.dart';
+import 'package:analyze_track/widgets/tracks_list/expenses_list.dart';
+import 'package:analyze_track/widgets/new_track.dart';
 import 'package:flutter/material.dart';
 
-class Expenses extends StatefulWidget {
+class TrackScreen extends StatefulWidget {
   final DatabaseHelper dbHelper;
-  const Expenses({super.key, required this.dbHelper});
+  const TrackScreen({super.key, required this.dbHelper});
 
   @override
-  State<Expenses> createState() => _ExpensesState();
+  State<TrackScreen> createState() => _TrackScreenState();
 }
 
-class _ExpensesState extends State<Expenses> {
-  List<Expense> _registeredExpenses = [];
+class _TrackScreenState extends State<TrackScreen> {
+  List<Track> _registeredTracks = [];
 
   @override
   void initState() {
     super.initState();
-    _loadExpenses();
+    _loadTracks();
   }
 
-  Future<void> _loadExpenses() async {
-    final expenses = await widget.dbHelper.getExpenses();
+  Future<void> _loadTracks() async {
+    final tracks = await widget.dbHelper.getTracks();
     setState(() {
-      _registeredExpenses = expenses;
+      _registeredTracks = tracks;
     });
   }
 
-  void _openAddExpenseOverlay() {
+  void _openAddTrackOverlay() {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (ctx) => NewExpense(
-        onAddExpense: _addExpense,
+      builder: (ctx) => NewTrack(
+        onAddTrack: _addTrack,
       ),
     );
   }
 
-  Future<void> _addExpense(Expense expense) async {
-    await widget.dbHelper.insertExpense(expense);
-    _loadExpenses();
+  Future<void> _addTrack(Track track) async {
+    await widget.dbHelper.insertTrack(track);
+    _loadTracks();
   }
 
-  Future<void> _removeExpense(Expense expense) async {
-    final expenseIndex = _registeredExpenses.indexOf(expense);
+  Future<void> _removeTrack(Track track) async {
+    final trackIndex = _registeredTracks.indexOf(track);
     setState(() {
-      _registeredExpenses.remove(expense);
+      _registeredTracks.remove(track);
     });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
-        content: const Text('Expense deleted.'),
+        content: const Text('Track deleted.'),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
             setState(() {
-              _registeredExpenses.insert(expenseIndex, expense);
+              _registeredTracks.insert(trackIndex, track);
             });
-            widget.dbHelper.insertExpense(expense);
+            widget.dbHelper.insertTrack(track);
           },
         ),
       ),
     );
-    await widget.dbHelper.deleteExpense(expense.id);
+    await widget.dbHelper.deleteTrack(track.id);
   }
 
   @override
@@ -74,10 +74,10 @@ class _ExpensesState extends State<Expenses> {
       child: Text('Nothing found. Start adding some!'),
     );
 
-    if (_registeredExpenses.isNotEmpty) {
-      mainContent = ExpensesList(
-        expenses: _registeredExpenses,
-        onRemoveExpense: _removeExpense,
+    if (_registeredTracks.isNotEmpty) {
+      mainContent = TracksList(
+        tracks: _registeredTracks,
+        onRemoveTrack: _removeTrack,
       );
     }
     return Scaffold(
@@ -85,7 +85,7 @@ class _ExpensesState extends State<Expenses> {
         title: const Text('Analyze Track'),
         actions: [
           IconButton(
-            onPressed: _openAddExpenseOverlay,
+            onPressed: _openAddTrackOverlay,
             icon: const Icon(Icons.add),
           ),
         ],

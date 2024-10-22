@@ -1,10 +1,10 @@
-import 'package:analyze_track/models/expense.dart';
+import 'package:analyze_track/models/track.dart';
 import 'package:flutter/material.dart';
 
-class ExpenseItem extends StatelessWidget {
-  const ExpenseItem(this.expense, {super.key});
+class TrackItem extends StatelessWidget {
+  const TrackItem(this.track, {super.key});
 
-  final Expense expense;
+  final Track track;
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +22,14 @@ class ExpenseItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    expense.title,
+                    track.title,
                     style: Theme.of(context).textTheme.titleLarge,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    expense.amount.toStringAsFixed(2),
+                    track.amount.toStringAsFixed(2),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -40,10 +40,10 @@ class ExpenseItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(expense.formattedDate),
+                  Text(track.formattedDate),
                   const SizedBox(height: 4),
                   Text(
-                    expense.category,
+                    track.category,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),

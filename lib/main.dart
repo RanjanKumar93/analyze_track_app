@@ -1,9 +1,9 @@
 import 'package:analyze_track/local/local_database.dart';
-import 'package:analyze_track/widgets/expenses.dart';
+import 'package:analyze_track/widgets/tracks.dart';
 import 'package:flutter/material.dart';
 
 var kColorScheme = ColorScheme.fromSeed(
-  seedColor: const Color.fromARGB(255, 96, 59, 181),
+  seedColor: const Color.fromARGB(255, 59, 79, 181),
 );
 
 var kDarkColorScheme = ColorScheme.fromSeed(
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
       ),
-      home: Expenses(dbHelper: dbHelper),
+      home: TrackScreen(dbHelper: dbHelper),
       debugShowCheckedModeBanner: false,
     );
   }

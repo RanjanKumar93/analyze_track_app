@@ -1,4 +1,4 @@
-import 'package:analyze_track/models/expense.dart';
+import 'package:analyze_track/models/track.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -32,21 +32,21 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> insertExpense(Expense expense) async {
+  Future<void> insertTrack(Track track) async {
     final db = await database;
     await db.insert(
       'tracks',
-      expense.toMap(),
+      track.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  Future<List<Expense>> getExpenses() async {
+  Future<List<Track>> getTracks() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('tracks');
 
     return List.generate(maps.length, (i) {
-      return Expense(
+      return Track(
         id: maps[i]['id'],
         title: maps[i]['title'],
         amount: maps[i]['amount'],
@@ -56,17 +56,17 @@ class DatabaseHelper {
     });
   }
 
-  Future<void> updateExpense(Expense expense) async {
+  Future<void> updateTrack(Track track) async {
     final db = await database;
     await db.update(
       'tracks',
-      expense.toMap(),
+      track.toMap(),
       where: 'id = ?',
-      whereArgs: [expense.id],
+      whereArgs: [track.id],
     );
   }
 
-  Future<void> deleteExpense(String id) async {
+  Future<void> deleteTrack(String id) async {
     final db = await database;
     await db.delete(
       'tracks',
@@ -75,11 +75,10 @@ class DatabaseHelper {
     );
   }
 
-
-    Future<void> deleteDatabaseFile() async {
+  Future<void> deleteDatabaseFile() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'database.db');
-    
+
     // Close the database before deleting it
     if (_database != null) {
       await _database!.close();

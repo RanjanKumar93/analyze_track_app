@@ -1,24 +1,24 @@
-import 'package:analyze_track/models/expense.dart';
-import 'package:analyze_track/widgets/expenses_list/expense_item.dart';
+import 'package:analyze_track/models/track.dart';
+import 'package:analyze_track/widgets/tracks_list/expense_item.dart';
 import 'package:flutter/material.dart';
 
-class ExpensesList extends StatelessWidget {
-  const ExpensesList({
+class TracksList extends StatelessWidget {
+  const TracksList({
     super.key,
-    required this.expenses,
-    required this.onRemoveExpense,
+    required this.tracks,
+    required this.onRemoveTrack,
   });
 
-  final List<Expense> expenses;
-  final void Function(Expense expense) onRemoveExpense;
+  final List<Track> tracks;
+  final void Function(Track track) onRemoveTrack;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: expenses.length,
+      itemCount: tracks.length,
       itemBuilder: (context, index) {
         return Dismissible(
-            key: ValueKey(expenses[index]),
+            key: ValueKey(tracks[index]),
             background: Container(
               color: Theme.of(context).colorScheme.error.withOpacity(0.75),
               margin: EdgeInsets.symmetric(
@@ -26,9 +26,9 @@ class ExpensesList extends StatelessWidget {
               ),
             ),
             onDismissed: (direction) {
-              onRemoveExpense(expenses[index]);
+              onRemoveTrack(tracks[index]);
             },
-            child: ExpenseItem(expenses[index]));
+            child: TrackItem(tracks[index]));
       },
     );
   }
