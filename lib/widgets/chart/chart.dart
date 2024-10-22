@@ -56,15 +56,19 @@ class _ChartScreenState extends State<ChartScreen> {
     });
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expense Chart'),
+        title: const Text('Track Chart'),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SfCircularChart(
+              legend: const Legend(
+                isVisible: true,
+                position: LegendPosition.bottom
+              ),
               tooltipBehavior: _tooltip,
               series: <CircularSeries<_ChartData, String>>[
                 DoughnutSeries<_ChartData, String>(
